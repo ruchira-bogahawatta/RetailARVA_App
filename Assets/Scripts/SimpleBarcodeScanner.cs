@@ -7,7 +7,7 @@ public class SimpleBarcodeScanner : MonoBehaviour
 {
     public TMPro.TextMeshProUGUI barcodeAsText;
     BarcodeBehaviour mBarcodeBehaviour;
-    public ProductInfo productInfo; // Reference to the ProductInfo script
+    public ProductInfo productInfo; 
 
     void Start()
     {
