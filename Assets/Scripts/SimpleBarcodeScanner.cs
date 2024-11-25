@@ -1,18 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using Vuforia;
 
 public class SimpleBarcodeScanner : MonoBehaviour
 {
     public TMPro.TextMeshProUGUI barcodeAsText;
     BarcodeBehaviour mBarcodeBehaviour;
-    public ProductInfo productInfo; 
+    public ProductInfo productInfo;
+    public Button overlayCloseBtn;
+
 
     void Start()
     {
         mBarcodeBehaviour = GetComponent<BarcodeBehaviour>();
         productInfo.ShowOverlay(false);
+        overlayCloseBtn.onClick.AddListener(CloseProductOverlay);
+
     }
 
 
@@ -50,7 +55,12 @@ public class SimpleBarcodeScanner : MonoBehaviour
         else
         {
             barcodeAsText.text = "";
-            productInfo.ShowOverlay(false);
+          
         }
+    }
+
+    void CloseProductOverlay()
+    {
+        productInfo.ShowOverlay(false);
     }
 }
