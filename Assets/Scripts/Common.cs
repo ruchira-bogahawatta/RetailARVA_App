@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
 public class SpeechRecognition
 {
-    // Request Body Class
+    // STT Request Body
     [System.Serializable]
     public class SttRequestBody
     {
@@ -46,7 +47,7 @@ public class SpeechRecognition
         }
     }
 
-    // Response Body Class
+    //STT Request Body
     [System.Serializable]
     public class SttResponseBody
     {
@@ -90,4 +91,96 @@ public class SpeechRecognition
             return ""; 
         }
     }
+
+    // TTS Request Body
+    [System.Serializable]
+    public class TssRequestBody
+    {
+        public SynthInput input;
+        public VoiceConfig voice;
+        public AudioConfig audioConfig;
+
+        [Serializable]
+        public class SynthInput
+        {
+            public string text;
+        }
+
+        [Serializable]
+        public class SynthOutput
+        {
+            public string audioContent;
+        }
+
+        [Serializable]
+        public class VoiceConfig
+        {
+            public string languageCode;
+            public string name;
+            public string ssmlGender;
+        }
+
+        [Serializable]
+        public class AudioConfig
+        {
+            public string audioEncoding;
+
+        }
+
+        public static TssRequestBody Create(string textToConvert)
+        {
+            return new TssRequestBody
+            {
+                input = new SynthInput
+                {
+                    text = textToConvert,
+                },
+                voice = new VoiceConfig
+                {
+                    languageCode = "en-US",
+                    name = "en-US-Journey-F",
+                    ssmlGender = "FEMALE"
+                },
+                audioConfig = new AudioConfig
+                {
+                    audioEncoding = "MP3"
+                }
+            };
+        }
+    }
+
+    // TTS Response Body
+    [Serializable]
+    public class TssResponseBody
+    {
+        public string audioContent;
+        public List<Timepoint> timepoints;
+        public AudioConfig audioConfig;
+
+        [Serializable]
+        public class Timepoint
+        {
+            public string markName;
+            public float timeSeconds;
+        }
+
+        [Serializable]
+        public class AudioConfig
+        {
+            public string audioEncoding;
+            public double speakingRate;
+            public double pitch;
+            public double volumeGainDb;
+            public int sampleRateHertz;
+            public List<string> effectsProfileId;
+        }
+
+        public static TssResponseBody Get(string responseText) 
+        {
+            TssResponseBody response = JsonUtility.FromJson<TssResponseBody>(responseText);
+
+            return response;
+        }
+    }
+
 }
