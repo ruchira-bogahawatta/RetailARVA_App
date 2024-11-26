@@ -2,14 +2,14 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Networking;
 using System.Text;
-using static SpeechRecognition;
-using UnityEditor.PackageManager;
+using static JsonObjectMapper;
 
 public static class HttpUtil
 {
     private static string apiKey = ConfigManager.GetAPIKey("SttAPIKey");
     private static string cloudSttURL = "https://speech.googleapis.com/v1/speech:recognize?key=";
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
+    private static string llmURL = "https://alert-evolved-chicken.ngrok-free.app/api/chat";
 
     // Coroutine to send AudioClip to Google Cloud Speech-to-Text API
     public static IEnumerator SendAudioToCloudSTT(string base64Audio, int sampleRateHertz , int audioChannelCount, System.Action<string> onSuccess, System.Action<string> onError)
@@ -33,7 +33,7 @@ public static class HttpUtil
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            string transcript = SpeechRecognition.SttResponseBody.ParseTranscript(request.downloadHandler.text);
+            string transcript = JsonObjectMapper.SttResponseBody.ParseTranscript(request.downloadHandler.text);
             onSuccess?.Invoke(transcript);
         }
         else
@@ -42,7 +42,7 @@ public static class HttpUtil
         }
     }
 
-    //Send Text to Google Cloud Text-to-Speech API
+    // Coroutine to send Text to Google Cloud Text-to-Speech API
     public static IEnumerator SendTextToCloudTTS(string textToConvert, System.Action<string> onSuccess, System.Action<string> onError) {
 
         string url = cloudTssURL + apiKey;
@@ -63,8 +63,36 @@ public static class HttpUtil
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            TssResponseBody responseBody = SpeechRecognition.TssResponseBody.Get(request.downloadHandler.text);
+            TssResponseBody responseBody = JsonObjectMapper.TssResponseBody.Get(request.downloadHandler.text);
             onSuccess?.Invoke(responseBody.audioContent);
+        }
+        else
+        {
+            onError?.Invoke(request.error);
+        }
+    }
+
+
+    //Send the request to LLM
+    public static IEnumerator SendMsgToLlm(string userInquiry, System.Action<string> onSuccess, System.Action<string> onError) {
+
+        LlmRequestBody requestBody = LlmRequestBody.Create(userInquiry);
+
+        string jsonBody = JsonUtility.ToJson(requestBody);
+        UnityWebRequest request = new UnityWebRequest(llmURL, "POST");
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
+        request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        request.timeout = 180;
+        // Send the request and wait for a response
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            LlmResponseBody responseBody = JsonObjectMapper.LlmResponseBody.Get(request.downloadHandler.text);
+            onSuccess?.Invoke(responseBody.response);
         }
         else
         {
