@@ -8,7 +8,6 @@ using TMPro;
 public class MicrophoneBehavior : MonoBehaviour
 {
     public Button recordButton;
-    public TMPro.TextMeshProUGUI transcriptText;
     public Interaction interaction;
 
     private AudioClip audioClip;
@@ -18,7 +17,6 @@ public class MicrophoneBehavior : MonoBehaviour
 
     void Start()
     {
-        transcriptText.text = "";
         recordButton.onClick.AddListener(ToggleRecording);
     }
 
@@ -56,20 +54,6 @@ public class MicrophoneBehavior : MonoBehaviour
         AudioClip trimmedClip = AudioUtil.TrimSilence(audioClip, 0.005f);
         string base64DataLinear16 = AudioUtil.ConvertToBase64Linear16(trimmedClip);
         interaction.SendMsg(trimmedClip, base64DataLinear16);
-        //StartCoroutine(HttpUtil.SendAudioToCloudSTT(base64DataLinear16,audioClip.frequency, audioClip.channels, OnSuccess, OnError));
     }
 
-    //private void OnSuccess(string transcript)
-    //{
-    //    transcriptText.text = transcript;
-    //    // send the text to LLM 
-
-    //    Debug.Log("Transcription: " + transcript);
-    //}
-
-    //private void OnError(string error)
-    //{
-    //    transcriptText.text = error;
-    //    Debug.LogError("Error occurred: " + error);
-    //}
 }

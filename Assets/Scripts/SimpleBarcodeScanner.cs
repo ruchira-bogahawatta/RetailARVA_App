@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Vuforia;
+using static JsonObjectMapper;
 
 public class SimpleBarcodeScanner : MonoBehaviour
 {
@@ -16,7 +17,6 @@ public class SimpleBarcodeScanner : MonoBehaviour
         mBarcodeBehaviour = GetComponent<BarcodeBehaviour>();
         productInfo.ShowOverlay(false);
         overlayCloseBtn.onClick.AddListener(closeProductOverlay);
-
     }
 
 
@@ -25,36 +25,12 @@ public class SimpleBarcodeScanner : MonoBehaviour
         if (mBarcodeBehaviour != null && mBarcodeBehaviour.InstanceData != null)
         {
             barcodeAsText.text = mBarcodeBehaviour.InstanceData.Text;
-            // Call Product Info
-
-            // Simulated product data (replace with your API response)
-            string productName = "Product ABC";
-            string keyIngredients = "Ingredient 1, Ingredient 2";
-            string benefits = "Benefit 1, Benefit 2";
-            string sideEffects = "Side Effect 1, Side Effect 2";
-            string usage = "Twice daily";
-            string skinTypes = "All skin types";
-            string sensitivities = "None";
-            string skinConcerns = "Dryness, Acne";
-            string price = "$19.99";
-
-            // Update the UI with product information
-            productInfo.setProductInfo(
-                productName,
-                keyIngredients,
-                benefits,
-                sideEffects,
-                usage,
-                skinTypes,
-                sensitivities,
-                skinConcerns,
-                price
-            );
+            string productID = mBarcodeBehaviour.InstanceData.Text;
+            StartCoroutine(HttpUtil.GetProductInfo(barcodeAsText.text, OnProductInfoSuccess, OnProductInfoError));
         }
         else
         {
             barcodeAsText.text = "";
-          
         }
     }
 
@@ -62,4 +38,26 @@ public class SimpleBarcodeScanner : MonoBehaviour
     {
         productInfo.ShowOverlay(false);
     }
+
+    private void OnProductInfoSuccess(ProductInfoResponseBody productData)
+    {
+        productInfo.setProductInfo(
+        productData.data.name,
+        productData.data.key_ingredients,
+        productData.data.benefits,
+        productData.data.side_effects == "NULL" ? "None" : productData.data.side_effects,
+        productData.data.usage,
+        productData.data.skin_types,
+        productData.data.sensitivities == "NULL" ? "None" : productData.data.sensitivities,
+        productData.data.skin_concerns,
+        "Rs. " + productData.data.price.ToString()
+    );
+
+    }
+    private void OnProductInfoError(string error)
+    {
+        Debug.LogError("Error occurred: " + error);
+
+    }
+
 }

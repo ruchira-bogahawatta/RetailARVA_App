@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Text;
 using static JsonObjectMapper;
+using Unity.VisualScripting;
 
 public static class HttpUtil
 {
@@ -10,6 +11,8 @@ public static class HttpUtil
     private static string cloudSttURL = "https://speech.googleapis.com/v1/speech:recognize?key=";
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
     private static string llmURL = "https://alert-evolved-chicken.ngrok-free.app/api/chat";
+    private static string prodcutInfoURL = "https://alert-evolved-chicken.ngrok-free.app/api/products/";
+
 
     // Coroutine to send AudioClip to Google Cloud Speech-to-Text API
     public static IEnumerator SendAudioToCloudSTT(string base64Audio, int sampleRateHertz , int audioChannelCount, System.Action<string> onSuccess, System.Action<string> onError)
@@ -99,4 +102,29 @@ public static class HttpUtil
             onError?.Invoke(request.error);
         }
     }
+
+
+    public static IEnumerator GetProductInfo(string productID, System.Action<ProductInfoResponseBody> onSuccess, System.Action<string> onError)
+    {
+     string url = prodcutInfoURL + productID;
+
+        UnityWebRequest request = new UnityWebRequest(url, "GET");
+
+        // Use a download handler to get the response as text
+        request.downloadHandler = new DownloadHandlerBuffer();
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            ProductInfoResponseBody responseBody = JsonObjectMapper.ProductInfoResponseBody.Get(request.downloadHandler.text);
+            onSuccess?.Invoke(responseBody);
+        }
+        else
+        {
+            onError?.Invoke(request.error);
+        }
+
+    }
+
 }
