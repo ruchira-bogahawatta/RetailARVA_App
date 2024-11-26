@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using ReadyPlayerMe.Core;
+using UnityEngine.UI;
 using UnityEngine;
 using System.IO;
 
@@ -9,10 +10,23 @@ public class Interaction : MonoBehaviour
 {
     public GameObject avatar;
     public GameObject loadingIcon;
-    // Start is called before the first frame update
+    public Button avatarBtn;
+    public GameObject planeFinder;
+    public TMPro.TextMeshProUGUI transcriptText;
+
+    private bool isPlaneFinder = false;
+    private Color activeBtnColor = new Color(1f, 1f, 1f, 0.353f);
+    private Color defaultBtnColor = new Color(38f / 255f, 38f / 255f, 38f / 255f); 
+
+
+
     void Start()
     {
+        transcriptText.text = "";
         loadingIcon.SetActive(false);
+        planeFinder.SetActive(isPlaneFinder);
+        avatarBtn.GetComponent<Image>().color = defaultBtnColor;
+        avatarBtn.onClick.AddListener(TogglePlaneFinder);
     }
 
     // Update is called once per frame
@@ -29,12 +43,10 @@ public class Interaction : MonoBehaviour
     private void STTOnSuccess(string transcript)
     {
         Debug.Log("Transcription: " + transcript);
-
+        transcriptText.text = "Transcript :  " + transcript;
         // send the text to LLM 
-        transcript = "how many pieces are include with Rivaj UK Deep Cleansing Black Mask Whitening Complex?";
         StartCoroutine(HttpUtil.SendMsgToLlm(transcript, LLMOnSuccess, LLMOnError));
         loadingIcon.SetActive(true);
-
     }
 
     private void STTOnError(string error)
@@ -45,6 +57,7 @@ public class Interaction : MonoBehaviour
     private void LLMOnSuccess(string llmResponse)
     {
         Debug.LogError("LLM Response: " + llmResponse);
+        transcriptText.text = "LLM Response :  " + llmResponse;
         StartCoroutine(HttpUtil.SendTextToCloudTTS(llmResponse, TSSOnSuccess, TSSOnError));
     }
 
@@ -73,4 +86,20 @@ public class Interaction : MonoBehaviour
         Debug.LogError("Error occurred: " + error);
     }
 
+    private void TogglePlaneFinder()
+    {
+        // Toggle the state of isPlaneFinder
+        isPlaneFinder = !isPlaneFinder;
+        // Enable or disable the Plane Finder accordingly
+        if (isPlaneFinder)
+        {
+            avatarBtn.GetComponent<Image>().color = activeBtnColor;
+            planeFinder.SetActive(isPlaneFinder);
+        }
+        else 
+        { 
+            avatarBtn.GetComponent<Image>().color = defaultBtnColor;
+            planeFinder.SetActive(isPlaneFinder);
+        }
+    }
 }

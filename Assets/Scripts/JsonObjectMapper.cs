@@ -205,4 +205,45 @@ public class JsonObjectMapper
         }
     
     }
+
+    [Serializable]
+    public class ProductInfoResponseBody
+    {
+        public ProductData data;
+
+        [Serializable]
+        public class ProductData
+        {
+            public string allergens;
+            public string application_tips;
+            public string benefits;
+            public string brand;
+            public string category;
+            public string concentrations;
+            public int id;
+            public string ingredients;
+            public bool is_natural;
+            public string key_ingredients;
+            public string name;
+            public float price;
+            public string sensitivities;
+            public string side_effects;
+            public string skin_concerns;
+            public string skin_types;
+            public string usage;
+        }
+
+
+        public static ProductInfoResponseBody Get(string responseText)
+        {
+            ProductInfoResponseBody response = JsonUtility.FromJson<ProductInfoResponseBody>(responseText);
+
+            return response;
+        }
+
+    }
+
+
+
+
 }
