@@ -11,12 +11,11 @@ public class SimpleBarcodeScanner : MonoBehaviour
     public ProductInfo productInfo;
     public Button overlayCloseBtn;
 
-
     void Start()
     {
         mBarcodeBehaviour = GetComponent<BarcodeBehaviour>();
         productInfo.ShowOverlay(false);
-        overlayCloseBtn.onClick.AddListener(CloseProductOverlay);
+        overlayCloseBtn.onClick.AddListener(closeProductOverlay);
 
     }
 
@@ -26,7 +25,7 @@ public class SimpleBarcodeScanner : MonoBehaviour
         if (mBarcodeBehaviour != null && mBarcodeBehaviour.InstanceData != null)
         {
             barcodeAsText.text = mBarcodeBehaviour.InstanceData.Text;
-            // Avatar
+            // Call Product Info
 
             // Simulated product data (replace with your API response)
             string productName = "Product ABC";
@@ -59,7 +58,7 @@ public class SimpleBarcodeScanner : MonoBehaviour
         }
     }
 
-    void CloseProductOverlay()
+    void closeProductOverlay()
     {
         productInfo.ShowOverlay(false);
     }

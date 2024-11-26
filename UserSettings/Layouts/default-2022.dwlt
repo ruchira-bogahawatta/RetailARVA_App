@@ -19,7 +19,7 @@ MonoBehaviour:
     width: 1536
     height: 772.8
   m_ShowMode: 4
-  m_Title: Simulator
+  m_Title: Console
   m_RootView: {fileID: 4}
   m_MinSize: {x: 875, y: 542}
   m_MaxSize: {x: 10000, y: 10000}
@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: AnimatorControllerTool
+  m_Name: SceneView
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -69,14 +69,14 @@ MonoBehaviour:
     y: 0
     width: 649.6
     height: 410.4
-  m_MinSize: {x: 102, y: 121}
+  m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
-  m_ActualView: {fileID: 13}
+  m_ActualView: {fileID: 17}
   m_Panes:
   - {fileID: 17}
   - {fileID: 13}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ProjectBrowser
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -272,15 +272,15 @@ MonoBehaviour:
     y: 410.4
     width: 1182.4
     height: 312.4
-  m_MinSize: {x: 231, y: 271}
-  m_MaxSize: {x: 10001, y: 10021}
-  m_ActualView: {fileID: 18}
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 19}
   m_Panes:
   - {fileID: 18}
   - {fileID: 19}
   - {fileID: 15}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &12
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -345,14 +345,14 @@ MonoBehaviour:
     m_KeySerializationHelper:
     - {fileID: -539862352573274472, guid: 10a1811808fb991448796bf163a9df34, type: 2}
     m_ValueSerializationHelper:
-    - e00: 0.5845161
+    - e00: 1.162997
       e01: 0
       e02: 0
-      e03: -2.535492
+      e03: -149.91638
       e10: 0
-      e11: 0.5845161
+      e11: 1.162997
       e12: 0
-      e13: 73.201935
+      e13: -79.66055
       e20: 0
       e21: 0
       e22: 1
@@ -435,7 +435,7 @@ MonoBehaviour:
     - UnityEditor.DeviceSimulation.ApplicationSettingsPlugin
     pluginStates:
     - '{}'
-    scale: 15
+    scale: 14
     fitToScreenEnabled: 0
     rotationDegree: 0
     highlightSafeAreaEnabled: 0
@@ -515,9 +515,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 64640000
-      m_LastClickedID: 25700
-      m_ExpandedIDs: 2afbffff22650000
+      m_SelectedIDs: 
+      m_LastClickedID: 0
+      m_ExpandedIDs: 2040ffff8240ffffea45ffff0246ffffd247ffff5649ffff5c49ffffc081ffff108effff58f2ffff44f5ffff70f6ffffda6f0000489e0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -563,7 +563,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 218.40001
     y: 73.6
-    width: 723.6
+    width: 647.6
     height: 389.4
   m_SerializedDataModeController:
     m_DataMode: 0
@@ -884,9 +884,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -0.000006765127, y: 0.86532474, z: -0.0016987324}
+    m_Target: {x: 485.801, y: 1267.0065, z: 19.929232}
     speed: 2
-    m_Value: {x: -0.000006765127, y: 0.86532474, z: -0.0016987324}
+    m_Value: {x: 485.801, y: 1267.0065, z: 19.929232}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -936,9 +936,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0.013808342, y: 0.013508631, z: -0.00018563292, w: 0.99981344}
   m_Size:
-    m_Target: 1.1171486
+    m_Target: 1149.3556
     speed: 2
-    m_Value: 1.1171486
+    m_Value: 1149.3556
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1008,7 +1008,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts
+    - Assets/Animated Loading Icons/Prefabs/Circle half rotating fading
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -1016,16 +1016,16 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scripts
+  - Assets/Animated Loading Icons/Prefabs/Circle half rotating fading
   m_LastFoldersGridSize: -1
   m_LastProjectPath: D:\unity_projects\retailARVA_App
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 5e6a0000
-    m_LastClickedID: 27230
-    m_ExpandedIDs: 000000005c6a0000
+    scrollPos: {x: 0, y: 20.600006}
+    m_SelectedIDs: de970000
+    m_LastClickedID: 38878
+    m_ExpandedIDs: 000000005c6a0000508d0000c2970000ce970000da970000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

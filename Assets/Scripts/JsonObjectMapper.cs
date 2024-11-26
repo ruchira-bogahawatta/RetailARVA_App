@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using ReadyPlayerMe.Core;
 using UnityEngine;
 
 [System.Serializable]
-public class SpeechRecognition
+public class JsonObjectMapper
 {
     // STT Request Body
     [System.Serializable]
@@ -143,7 +144,7 @@ public class SpeechRecognition
                 },
                 audioConfig = new AudioConfig
                 {
-                    audioEncoding = "MP3"
+                    audioEncoding = "LINEAR16"
                 }
             };
         }
@@ -183,4 +184,25 @@ public class SpeechRecognition
         }
     }
 
+    [Serializable]
+    public class LlmRequestBody {
+        public string message;
+        public static LlmRequestBody Create(string userInquiry) {
+            
+            return new LlmRequestBody { message = userInquiry };
+        }
+    }
+
+    [Serializable]
+    public class LlmResponseBody
+    {
+        public string response;
+
+        public static LlmResponseBody Get(string responseText)
+        {
+            LlmResponseBody response = JsonUtility.FromJson<LlmResponseBody>(responseText);
+            return response;
+        }
+    
+    }
 }

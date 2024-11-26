@@ -151,4 +151,30 @@ public static class AudioUtil
             return null;
         }
     }
+
+
+    public static AudioClip GetClipFromBase64(string Base64data)
+    {
+        byte[] data = Convert.FromBase64String(Base64data);
+        float[] floatData = ConvertByteToFloat(data);
+        AudioClip newClip = AudioClip.Create("TTS_Clip", floatData.Length,
+            BitConverter.ToUInt16(data, 22),
+            BitConverter.ToInt32(data, 24), false);
+        newClip.SetData(floatData, 44);
+
+        return newClip;
+    }
+
+    public static float[] ConvertByteToFloat(byte[] array)
+    {
+        float[] floatArr = new float[(array.Length / 2) - 22];
+
+        for (int i = 0; i < floatArr.Length; i++)
+        {
+            floatArr[i] = ((float)BitConverter.ToInt16(array, i * 2)) / 32768.0f;
+        }
+
+        return floatArr;
+    }
+
 }
