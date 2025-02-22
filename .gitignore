@@ -63,3 +63,5 @@ Thumbs.db
 
 #Config
 /Assets/Resources/config.json
+
+/Packages/com.ptc.vuforia.engine-10.29.6.tgz
