@@ -10,8 +10,10 @@ public static class HttpUtil
     private static string apiKey = ConfigManager.GetAPIKey("SttAPIKey");
     private static string cloudSttURL = "https://speech.googleapis.com/v1/speech:recognize?key=";
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
-    private static string llmURL = "https://alert-evolved-chicken.ngrok-free.app/api/chat";
-    private static string prodcutInfoURL = "https://alert-evolved-chicken.ngrok-free.app/api/products/";
+    //private static string llmURL = "https://alert-evolved-chicken.ngrok-free.app/api/chat";
+    private static string llmURL = "https://ca252daec76a97c370585e3c5492e492.loophole.site/";
+    private static string prodcutInfoURL = "https://ca252daec76a97c370585e3c5492e492.loophole.site/product";
+    // private static string prodcutInfoURL = "https://alert-evolved-chicken.ngrok-free.app/api/products/";
 
 
     // Coroutine to send AudioClip to Google Cloud Speech-to-Text API
@@ -82,13 +84,14 @@ public static class HttpUtil
         LlmRequestBody requestBody = LlmRequestBody.Create(userInquiry);
 
         string jsonBody = JsonUtility.ToJson(requestBody);
-        UnityWebRequest request = new UnityWebRequest(llmURL, "POST");
-        byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
-        request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+        //UnityWebRequest request = new UnityWebRequest(llmURL, "POST");
+        UnityWebRequest request = new UnityWebRequest(llmURL, "GET");
+        //byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
+        //request.uploadHandler = new UploadHandlerRaw(jsonBytes);
         request.downloadHandler = new DownloadHandlerBuffer();
-        request.SetRequestHeader("Content-Type", "application/json");
+        //request.SetRequestHeader("Content-Type", "application/json");
 
-        request.timeout = 180;
+        //request.timeout = 180;
         // Send the request and wait for a response
         yield return request.SendWebRequest();
 
@@ -106,7 +109,8 @@ public static class HttpUtil
 
     public static IEnumerator GetProductInfo(string productID, System.Action<ProductInfoResponseBody> onSuccess, System.Action<string> onError)
     {
-     string url = prodcutInfoURL + productID;
+        //string url = prodcutInfoURL + productID;
+        string url = prodcutInfoURL;
 
         UnityWebRequest request = new UnityWebRequest(url, "GET");
 
