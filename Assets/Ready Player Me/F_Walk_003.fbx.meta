@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: aafa98a5c2b75f84081f592ce54f877b
+guid: b4043076058caec49bf0a36abb60a541
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -24,7 +24,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 3
+    animationCompression: 1
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -33,21 +33,21 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: F_Standing_Idle_Variations_003
-      takeName: F_Standing_Idle_Variations_003
-      internalID: -5999091110060893652
+      name: F_Walk_003
+      takeName: F_Walk_003
+      internalID: -1572893604584313257
       firstFrame: 0
-      lastFrame: 100
+      lastFrame: 88
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
-      loopBlendOrientation: 0
-      loopBlendPositionY: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
       loopBlendPositionXZ: 0
       keepOriginalOrientation: 0
       keepOriginalPositionY: 1

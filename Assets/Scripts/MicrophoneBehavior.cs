@@ -34,6 +34,7 @@ public class MicrophoneBehavior : MonoBehaviour
 
     void StartRecording()
     {
+        Debug.Log(Microphone.devices.Length);
         recordButton.GetComponent<Image>().color = recordingColor;
         audioClip = Microphone.Start(null, false, 15, 44100); // 10 seconds max, 44100 Hz
         isRecording = true;
@@ -54,6 +55,7 @@ public class MicrophoneBehavior : MonoBehaviour
         AudioClip trimmedClip = AudioUtil.TrimSilence(audioClip, 0.005f);
         string base64DataLinear16 = AudioUtil.ConvertToBase64Linear16(trimmedClip);
         interaction.SendMsg(trimmedClip, base64DataLinear16);
+
     }
 
 }

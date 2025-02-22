@@ -25,8 +25,7 @@ public class SimpleBarcodeScanner : MonoBehaviour
         if (mBarcodeBehaviour != null && mBarcodeBehaviour.InstanceData != null)
         {
             barcodeAsText.text = mBarcodeBehaviour.InstanceData.Text;
-            string productID = mBarcodeBehaviour.InstanceData.Text;
-            StartCoroutine(HttpUtil.GetProductInfo(barcodeAsText.text, OnProductInfoSuccess, OnProductInfoError));
+            StartCoroutine(HttpUtil.GetProductInfo(mBarcodeBehaviour.InstanceData.Text, OnProductInfoSuccess, OnProductInfoError));
         }
         else
         {

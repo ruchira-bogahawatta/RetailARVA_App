@@ -56,7 +56,7 @@ public class Interaction : MonoBehaviour
 
     private void LLMOnSuccess(string llmResponse)
     {
-        Debug.LogError("LLM Response: " + llmResponse);
+        Debug.Log("LLM Response: " + llmResponse);
         transcriptText.text = "LLM Response :  " + llmResponse;
         StartCoroutine(HttpUtil.SendTextToCloudTTS(llmResponse, TSSOnSuccess, TSSOnError));
     }
@@ -64,6 +64,7 @@ public class Interaction : MonoBehaviour
     private void LLMOnError(string error)
     {
         Debug.LogError("Error occurred: " + error);
+        transcriptText.text = "LLM Error : " + error;
     }
 
     private void TSSOnSuccess(string base64Audio)
@@ -84,6 +85,7 @@ public class Interaction : MonoBehaviour
     private void TSSOnError(string error)
     {
         Debug.LogError("Error occurred: " + error);
+        transcriptText.text = "TSS error : " + error;
     }
 
     private void TogglePlaneFinder()
@@ -91,6 +93,7 @@ public class Interaction : MonoBehaviour
         // Toggle the state of isPlaneFinder
         isPlaneFinder = !isPlaneFinder;
         // Enable or disable the Plane Finder accordingly
+
         if (isPlaneFinder)
         {
             avatarBtn.GetComponent<Image>().color = activeBtnColor;
