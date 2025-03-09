@@ -243,7 +243,41 @@ public class JsonObjectMapper
 
     }
 
+    [Serializable]
+    public class ProfileData
+    {
+        public string age;
+        public string gender;
+        public string skinType;
+        public string sensitiveSkin;
+        public List<string> skinConcerns;
+        public List<string> ingredientsToAvoid;
+        public List<string> knownAllergies;
+        public string minPrice;
+        public string maxPrice;
+        public List<string> preferences;
 
+        // Constructor to initialize lists (optional, for safety)
+        public ProfileData()
+        {
+            skinConcerns = new List<string>();
+            ingredientsToAvoid = new List<string>();
+            knownAllergies = new List<string>();
+            preferences = new List<string>();
+        }
+    }
 
+    public class ProfileDataReqBody
+    {
+        public ProfileData profileData;
+
+        public static ProfileDataReqBody Create(ProfileData data)
+        {
+            return new ProfileDataReqBody
+            {
+                profileData = data
+            };
+        }
+    }
 
 }
