@@ -287,7 +287,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   arCamera: {fileID: 1153630402}
   avatar: {fileID: 3196852611028087559}
-  animator: {fileID: 0}
   moveSpeed: 1.5
   stopDistance: 1.5
 --- !u!4 &4837810
