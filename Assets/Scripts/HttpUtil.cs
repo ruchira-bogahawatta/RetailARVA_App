@@ -11,8 +11,8 @@ public static class HttpUtil
     private static string cloudSttURL = "https://speech.googleapis.com/v1/speech:recognize?key=";
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
     //private static string llmURL = "https://alert-evolved-chicken.ngrok-free.app/api/chat";
-    private static string llmURL = "https://ca252daec76a97c370585e3c5492e492.loophole.site/";
-    private static string prodcutInfoURL = "https://ca252daec76a97c370585e3c5492e492.loophole.site/product";
+    private static string llmURL = "https://e2b1f2114c5415fcdae08de5f106f022.loophole.site/";
+    private static string prodcutInfoURL = "https://e2b1f2114c5415fcdae08de5f106f022.loophole.site/product";
     // private static string prodcutInfoURL = "https://alert-evolved-chicken.ngrok-free.app/api/products/";
 
 
