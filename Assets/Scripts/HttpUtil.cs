@@ -12,8 +12,8 @@ public static class HttpUtil
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
     //private static string llmURL = "https://alert-evolved-chicken.ngrok-free.app/api/chat";
     private static string llmURL = "https://e2b1f2114c5415fcdae08de5f106f022.loophole.site/";
-    private static string profileInfoUrl = "https://e2b1f2114c5415fcdae08de5f106f022.loophole.site/";
-    private static string prodcutInfoURL = "https://e2b1f2114c5415fcdae08de5f106f022.loophole.site/product";
+    private static string profileInfoUrl = "https://19a28e4e0e304473f75e1af5ff315717.loophole.site/profile";
+    private static string prodcutInfoURL = "https://19a28e4e0e304473f75e1af5ff315717.loophole.site/profile";
     // private static string prodcutInfoURL = "https://alert-evolved-chicken.ngrok-free.app/api/products/";
 
 
@@ -156,6 +156,36 @@ public static class HttpUtil
         {
             onError?.Invoke(request.error);
         }
+    }
+
+
+    public static IEnumerator GetProfileInfo(string username, System.Action<ProfileData> onSuccess, System.Action<string> onError)
+    {
+        //string url = prodcutInfoURL + productID;
+        string url = profileInfoUrl;
+
+        UnityWebRequest request = new UnityWebRequest(url, "GET");
+
+        // Use a download handler to get the response as text
+        request.downloadHandler = new DownloadHandlerBuffer();
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+
+            ProfileData responseBody = JsonObjectMapper.ProfileData.Get(request.downloadHandler.text);
+            onSuccess?.Invoke(responseBody);
+        }
+        else if (request.responseCode == 404) {
+            ProfileData responseBody = null;
+            onSuccess?.Invoke(responseBody);
+
+        } else { 
+            onError?.Invoke(request.error);
+
+        }
+
     }
 
 

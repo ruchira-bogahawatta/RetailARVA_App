@@ -27,6 +27,8 @@ public class ProfileInfo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        StartCoroutine(HttpUtil.GetProfileInfo("ruchira", SetProfileInfo, OnProfileInfoError));
+
         submitButton.onClick.AddListener(SubmitFormData);
     }
 
@@ -94,15 +96,15 @@ public class ProfileInfo : MonoBehaviour
 
         StartCoroutine(HttpUtil.SendProfileInfo(profileData, OnProfileInfoSuccess, OnProfileInfoError));
 
-        Debug.Log("Age: " + age);
-            Debug.Log("Gender: " + gender);
-            Debug.Log("Skin Type: " + skinType);
-            Debug.Log("Sensitive Skin: " + sensitiveSkin);
-            Debug.Log("Skin Concerns: " + string.Join(", ", skinConcerns));
-            Debug.Log("Ingredients to Avoid: " + string.Join(", ", ingredientsToAvoid));
-            Debug.Log("Known Allergies: " + string.Join(", ", allergies));
-            Debug.Log("Price Range: " + minPrice + " - " + maxPrice);
-            Debug.Log("Preferences: " + string.Join(", ", preferences));
+        //Debug.Log("Age: " + age);
+        //    Debug.Log("Gender: " + gender);
+        //    Debug.Log("Skin Type: " + skinType);
+        //    Debug.Log("Sensitive Skin: " + sensitiveSkin);
+        //    Debug.Log("Skin Concerns: " + string.Join(", ", skinConcerns));
+        //    Debug.Log("Ingredients to Avoid: " + string.Join(", ", ingredientsToAvoid));
+        //    Debug.Log("Known Allergies: " + string.Join(", ", allergies));
+        //    Debug.Log("Price Range: " + minPrice + " - " + maxPrice);
+        //    Debug.Log("Preferences: " + string.Join(", ", preferences));
     }
 
     private void OnProfileInfoSuccess()
@@ -112,7 +114,53 @@ public class ProfileInfo : MonoBehaviour
 
     private void OnProfileInfoError(string error)
     {
-        Debug.LogError("Error occurred: " + error);
+        Debug.Log("Error occurred: " + error);
+    }
+
+    private void SetProfileInfo(ProfileData profileData)
+    {
+        if (profileData != null)
+        {
+
+            ageInput.text = profileData.age;
+            genderDropdown.value = genderDropdown.options.FindIndex(option => option.text == profileData.gender);
+            skinTypeDropdown.value = skinTypeDropdown.options.FindIndex(option => option.text == profileData.skinType);
+            sensitiveSkinDropdown.value = sensitiveSkinDropdown.options.FindIndex(option => option.text == profileData.sensitiveSkin);
+
+            acneToggle.isOn = profileData.skinConcerns.Contains("acne");
+            darkSpotsToggle.isOn = profileData.skinConcerns.Contains("darkspots");
+            wrinklesToggle.isOn = profileData.skinConcerns.Contains("wrinkles");
+            drynessToggle.isOn = profileData.skinConcerns.Contains("dryness");
+            oilinessToggle.isOn = profileData.skinConcerns.Contains("oiliness");
+            sensitivityToggle.isOn = profileData.skinConcerns.Contains("sensitivity");
+            poresToggle.isOn = profileData.skinConcerns.Contains("pores");
+            sunToggle.isOn = profileData.skinConcerns.Contains("sun");
+
+            naturalToggle.isOn = profileData.ingredientsToAvoid.Contains("natural");
+            fragrancesToggle.isOn = profileData.ingredientsToAvoid.Contains("fragrances");
+            preservativesToggle.isOn = profileData.ingredientsToAvoid.Contains("preservatives");
+            parabensToggle.isOn = profileData.ingredientsToAvoid.Contains("parabens");
+            dyesToggle.isOn = profileData.ingredientsToAvoid.Contains("dyes");
+            metalsToggle.isOn = profileData.ingredientsToAvoid.Contains("metals");
+
+            coconutOilToggle.isOn = profileData.knownAllergies.Contains("coconut_oil");
+            aloeVeraToggle.isOn = profileData.knownAllergies.Contains("aloevera");
+            sheaButterToggle.isOn = profileData.knownAllergies.Contains("sheabutter");
+            chamomileToggle.isOn = profileData.knownAllergies.Contains("chamomile");
+            witchHazelToggle.isOn = profileData.knownAllergies.Contains("witch_hazel");
+            sesameOilToggle.isOn = profileData.knownAllergies.Contains("sesame_oil");
+            soyDerivativesToggle.isOn = profileData.knownAllergies.Contains("soy_derivatives");
+            nutOilsToggle.isOn = profileData.knownAllergies.Contains("nut_oils");
+
+            minPriceInput.text = profileData.minPrice;
+            maxPriceInput.text = profileData.maxPrice;
+
+            preferenceNaturalToggle.isOn = profileData.preferences.Contains("natural");
+            preferenceOrganicToggle.isOn = profileData.preferences.Contains("organic");
+            preferenceVeganToggle.isOn = profileData.preferences.Contains("vegan");
+
+        }
+
     }
 
 }

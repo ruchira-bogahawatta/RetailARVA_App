@@ -265,6 +265,13 @@ public class JsonObjectMapper
             knownAllergies = new List<string>();
             preferences = new List<string>();
         }
+
+        public static ProfileData Get(string responseText)
+        {
+            ProfileData response = JsonUtility.FromJson<ProfileData>(responseText);
+
+            return response;
+        }
     }
 
     public class ProfileDataReqBody
@@ -279,5 +286,7 @@ public class JsonObjectMapper
             };
         }
     }
+
+
 
 }
