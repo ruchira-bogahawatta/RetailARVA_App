@@ -12,6 +12,7 @@ public static class HttpUtil
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
     //private static string llmURL = "https://alert-evolved-chicken.ngrok-free.app/api/chat";
     private static string llmURL = "https://e2b1f2114c5415fcdae08de5f106f022.loophole.site/";
+    private static string profileInfoUrl = "https://e2b1f2114c5415fcdae08de5f106f022.loophole.site/";
     private static string prodcutInfoURL = "https://e2b1f2114c5415fcdae08de5f106f022.loophole.site/product";
     // private static string prodcutInfoURL = "https://alert-evolved-chicken.ngrok-free.app/api/products/";
 
@@ -130,5 +131,32 @@ public static class HttpUtil
         }
 
     }
+
+
+    public static IEnumerator SendProfileInfo(ProfileData profileData, System.Action onSuccess, System.Action<string> onError)
+    {
+
+        ProfileDataReqBody requestBody = ProfileDataReqBody.Create(profileData);
+
+        string jsonBody = JsonUtility.ToJson(requestBody);
+        UnityWebRequest request = new UnityWebRequest(profileInfoUrl, "POST");
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody); 
+        request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            onSuccess?.Invoke();
+        }
+        else
+        {
+            onError?.Invoke(request.error);
+        }
+    }
+
 
 }
