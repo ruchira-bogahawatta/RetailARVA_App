@@ -287,6 +287,48 @@ public class JsonObjectMapper
         }
     }
 
+    [Serializable]
+    public class UserInfo
+    {
+        public string userID;
+        public string fName;
+        public string lName;
+        public string email;
+
+        public static UserInfo Get(string responseText)
+        {
+            UserInfo response = JsonUtility.FromJson<UserInfo>(responseText);
+
+            return response;
+        }
+    }
+
+    public class UserInfoReqBody
+    {
+        public UserInfo userInfo;
+
+        public static UserInfoReqBody Create(UserInfo data)
+        {
+            return new UserInfoReqBody
+            {
+                userInfo = data
+            };
+        }
+    }
+
+    [System.Serializable]
+    public class LoginRequestBody
+    {
+        public string email;
+
+        public static LoginRequestBody Create(String email)
+        {
+            return new LoginRequestBody
+            {
+                email = email
+            };
+        }
+    }
 
 
 }

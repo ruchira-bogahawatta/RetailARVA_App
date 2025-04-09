@@ -4,6 +4,7 @@ using UnityEngine.Networking;
 using System.Text;
 using static JsonObjectMapper;
 using Unity.VisualScripting;
+using System;
 
 public static class HttpUtil
 {
@@ -11,9 +12,11 @@ public static class HttpUtil
     private static string cloudSttURL = "https://speech.googleapis.com/v1/speech:recognize?key=";
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
     //private static string llmURL = "https://alert-evolved-chicken.ngrok-free.app/api/chat";
-    private static string llmURL = "https://e2b1f2114c5415fcdae08de5f106f022.loophole.site/";
-    private static string profileInfoUrl = "https://19a28e4e0e304473f75e1af5ff315717.loophole.site/profile";
-    private static string prodcutInfoURL = "https://19a28e4e0e304473f75e1af5ff315717.loophole.site/profile";
+    private static string llmURL = "https://fc0fa5abad6ca6d800770feea90d44e8.loophole.site/";
+    private static string profileInfoUrl = "https://fc0fa5abad6ca6d800770feea90d44e8.loophole.site/profile";
+    private static string prodcutInfoURL = "https://fc0fa5abad6ca6d800770feea90d44e8.loophole.site/product";
+    private static string loginURL = "https://fc0fa5abad6ca6d800770feea90d44e8.loophole.site/login";
+    private static string registerURL = "https://fc0fa5abad6ca6d800770feea90d44e8.loophole.site/register";
     // private static string prodcutInfoURL = "https://alert-evolved-chicken.ngrok-free.app/api/products/";
 
 
@@ -114,8 +117,6 @@ public static class HttpUtil
         string url = prodcutInfoURL;
 
         UnityWebRequest request = new UnityWebRequest(url, "GET");
-
-        // Use a download handler to get the response as text
         request.downloadHandler = new DownloadHandlerBuffer();
 
         yield return request.SendWebRequest();
@@ -165,10 +166,7 @@ public static class HttpUtil
         string url = profileInfoUrl;
 
         UnityWebRequest request = new UnityWebRequest(url, "GET");
-
-        // Use a download handler to get the response as text
         request.downloadHandler = new DownloadHandlerBuffer();
-
         yield return request.SendWebRequest();
 
         if (request.result == UnityWebRequest.Result.Success)
@@ -186,6 +184,64 @@ public static class HttpUtil
 
         }
 
+    }
+
+    public static IEnumerator Login(String email, System.Action<UserInfo> onSuccess, System.Action<string> onError)
+    {
+
+        LoginRequestBody requestBody = LoginRequestBody.Create(email);
+
+        string jsonBody = JsonUtility.ToJson(requestBody);
+        UnityWebRequest request = new UnityWebRequest(loginURL, "POST");
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
+        request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            UserInfo responseBody = JsonObjectMapper.UserInfo.Get(request.downloadHandler.text);
+            onSuccess?.Invoke(responseBody);
+        }
+        else if (request.responseCode == 404)
+        {
+            UserInfo userInfo = null;
+            onSuccess?.Invoke(userInfo);
+
+        }
+        else
+        {
+            onError?.Invoke(request.error);
+        }
+    }
+
+    public static IEnumerator Register(UserInfo userInfo, System.Action onSuccess, System.Action<string> onError)
+    {
+
+        UserInfoReqBody requestBody = UserInfoReqBody.Create(userInfo);
+
+        string jsonBody = JsonUtility.ToJson(requestBody);
+        UnityWebRequest request = new UnityWebRequest(registerURL, "POST");
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
+        request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+
+        yield return request.SendWebRequest();
+        Debug.Log("Request sent in register");
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            onSuccess?.Invoke();
+        }
+        else
+        {
+            onError?.Invoke(request.error);
+        }
     }
 
 
