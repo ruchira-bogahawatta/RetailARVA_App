@@ -42,7 +42,7 @@ public class Interaction : MonoBehaviour
 
     private void STTOnSuccess(string transcript)
     {
-        Debug.Log("Transcription: " + transcript);
+        //Debug.Log("Transcription: " + transcript);
         transcriptText.text = "Transcript :  " + transcript;
         // send the text to LLM 
         StartCoroutine(HttpUtil.SendMsgToLlm(transcript, LLMOnSuccess, LLMOnError));

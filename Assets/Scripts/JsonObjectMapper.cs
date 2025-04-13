@@ -82,7 +82,7 @@ public class JsonObjectMapper
                     if (result.alternatives != null && result.alternatives.Length > 0)
                     {
                         transcript += result.alternatives[0].transcript + " ";
-                        Debug.Log("Confidence of " + result.alternatives[0].transcript + " is " + result.alternatives[0].confidence);
+                        //Debug.Log("Confidence of " + result.alternatives[0].transcript + " is " + result.alternatives[0].confidence);
 
                     }
                 }

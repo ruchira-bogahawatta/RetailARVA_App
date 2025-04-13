@@ -9,15 +9,14 @@ using System;
 public static class HttpUtil
 {
     private static string apiKey = ConfigManager.GetAPIKey("SttAPIKey");
+    private static string baseURL = "https://caf6539e02b9d345617201084271b2c8.loophole.site";
     private static string cloudSttURL = "https://speech.googleapis.com/v1/speech:recognize?key=";
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
-    //private static string llmURL = "https://alert-evolved-chicken.ngrok-free.app/api/chat";
-    private static string llmURL = "https://fc0fa5abad6ca6d800770feea90d44e8.loophole.site/";
-    private static string profileInfoUrl = "https://fc0fa5abad6ca6d800770feea90d44e8.loophole.site/profile";
-    private static string prodcutInfoURL = "https://fc0fa5abad6ca6d800770feea90d44e8.loophole.site/product";
-    private static string loginURL = "https://fc0fa5abad6ca6d800770feea90d44e8.loophole.site/login";
-    private static string registerURL = "https://fc0fa5abad6ca6d800770feea90d44e8.loophole.site/register";
-    // private static string prodcutInfoURL = "https://alert-evolved-chicken.ngrok-free.app/api/products/";
+    private static string llmURL = baseURL + "/llm";
+    private static string profileInfoUrl = baseURL + "/profile";
+    private static string prodcutInfoURL = baseURL + "/product";
+    private static string loginURL = baseURL + "/login";
+    private static string registerURL = baseURL + "/register";
 
 
     // Coroutine to send AudioClip to Google Cloud Speech-to-Text API
@@ -88,14 +87,14 @@ public static class HttpUtil
         LlmRequestBody requestBody = LlmRequestBody.Create(userInquiry);
 
         string jsonBody = JsonUtility.ToJson(requestBody);
-        //UnityWebRequest request = new UnityWebRequest(llmURL, "POST");
-        UnityWebRequest request = new UnityWebRequest(llmURL, "GET");
-        //byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
-        //request.uploadHandler = new UploadHandlerRaw(jsonBytes);
-        request.downloadHandler = new DownloadHandlerBuffer();
-        //request.SetRequestHeader("Content-Type", "application/json");
+        Debug.Log(jsonBody);
 
-        //request.timeout = 180;
+        UnityWebRequest request = new UnityWebRequest(llmURL, "POST");
+        byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
+        request.uploadHandler = new UploadHandlerRaw(jsonBytes);
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
         // Send the request and wait for a response
         yield return request.SendWebRequest();
 
@@ -113,8 +112,7 @@ public static class HttpUtil
 
     public static IEnumerator GetProductInfo(string productID, System.Action<ProductInfoResponseBody> onSuccess, System.Action<string> onError)
     {
-        //string url = prodcutInfoURL + productID;
-        string url = prodcutInfoURL;
+        string url = prodcutInfoURL + "/" + productID;
 
         UnityWebRequest request = new UnityWebRequest(url, "GET");
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -134,13 +132,16 @@ public static class HttpUtil
     }
 
 
-    public static IEnumerator SendProfileInfo(ProfileData profileData, System.Action onSuccess, System.Action<string> onError)
+    public static IEnumerator SendProfileInfo(ProfileData profileData, string userID, System.Action onSuccess, System.Action<string> onError)
     {
+        string url = profileInfoUrl + "/" + userID; ;
 
         ProfileDataReqBody requestBody = ProfileDataReqBody.Create(profileData);
 
         string jsonBody = JsonUtility.ToJson(requestBody);
-        UnityWebRequest request = new UnityWebRequest(profileInfoUrl, "POST");
+        Debug.Log(jsonBody);
+
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
         byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody); 
         request.uploadHandler = new UploadHandlerRaw(jsonBytes);
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -160,10 +161,12 @@ public static class HttpUtil
     }
 
 
-    public static IEnumerator GetProfileInfo(string username, System.Action<ProfileData> onSuccess, System.Action<string> onError)
+    public static IEnumerator GetProfileInfo(System.Action<ProfileData> onSuccess, System.Action<string> onError)
     {
-        //string url = prodcutInfoURL + productID;
-        string url = profileInfoUrl;
+        string userID = SessionManager.UserID;
+        userID = "01";
+
+        string url = profileInfoUrl + "/" + userID;
 
         UnityWebRequest request = new UnityWebRequest(url, "GET");
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -192,6 +195,8 @@ public static class HttpUtil
         LoginRequestBody requestBody = LoginRequestBody.Create(email);
 
         string jsonBody = JsonUtility.ToJson(requestBody);
+        Debug.Log(jsonBody);
+
         UnityWebRequest request = new UnityWebRequest(loginURL, "POST");
         byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
         request.uploadHandler = new UploadHandlerRaw(jsonBytes);
@@ -224,6 +229,8 @@ public static class HttpUtil
         UserInfoReqBody requestBody = UserInfoReqBody.Create(userInfo);
 
         string jsonBody = JsonUtility.ToJson(requestBody);
+        Debug.Log(jsonBody);
+
         UnityWebRequest request = new UnityWebRequest(registerURL, "POST");
         byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
         request.uploadHandler = new UploadHandlerRaw(jsonBytes);

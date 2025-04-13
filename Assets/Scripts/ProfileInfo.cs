@@ -25,7 +25,7 @@ public class ProfileInfo : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        StartCoroutine(HttpUtil.GetProfileInfo("ruchira", SetProfileInfo, OnProfileInfoError));
+        StartCoroutine(HttpUtil.GetProfileInfo(SetProfileInfo, OnProfileInfoError));
 
         submitButton.onClick.AddListener(SubmitFormData);
     }
@@ -92,7 +92,9 @@ public class ProfileInfo : MonoBehaviour
         profileData.maxPrice = maxPrice;
         profileData.preferences = preferences;
 
-        StartCoroutine(HttpUtil.SendProfileInfo(profileData, OnProfileInfoSuccess, OnProfileInfoError));
+        string userID = SessionManager.UserID;
+        userID = "01";
+        StartCoroutine(HttpUtil.SendProfileInfo(profileData, userID, OnProfileInfoSuccess, OnProfileInfoError));
 
         //Debug.Log("Age: " + age);
         //    Debug.Log("Gender: " + gender);
