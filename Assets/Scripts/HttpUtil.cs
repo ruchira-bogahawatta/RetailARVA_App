@@ -9,14 +9,14 @@ using System;
 public static class HttpUtil
 {
     private static string apiKey = ConfigManager.GetAPIKey("SttAPIKey");
-    private static string baseURL = "https://caf6539e02b9d345617201084271b2c8.loophole.site";
+    private static string baseURL = "http://localhost:5000/api";
     private static string cloudSttURL = "https://speech.googleapis.com/v1/speech:recognize?key=";
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
     private static string llmURL = baseURL + "/llm";
     private static string profileInfoUrl = baseURL + "/profile";
-    private static string prodcutInfoURL = baseURL + "/product";
-    private static string loginURL = baseURL + "/login";
-    private static string registerURL = baseURL + "/register";
+    //private static string prodcutInfoURL = baseURL + "/products";
+    private static string loginURL = baseURL + "/users/login";
+    private static string registerURL = baseURL + "/users";
 
 
     // Coroutine to send AudioClip to Google Cloud Speech-to-Text API
@@ -80,6 +80,29 @@ public static class HttpUtil
         }
     }
 
+    public static IEnumerator CreateChat(System.Action onSuccess, System.Action<string>onError)
+    {
+
+        string url = baseURL + "/chat/new/" + SessionManager.UserID;
+
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
+        request.downloadHandler = new DownloadHandlerBuffer();
+        request.SetRequestHeader("Content-Type", "application/json");
+
+        // Send the request and wait for a response
+        yield return request.SendWebRequest();
+
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+            //LlmResponseBody responseBody = JsonObjectMapper.LlmResponseBody.Get(request.downloadHandler.text);
+            onSuccess?.Invoke();
+            Debug.Log(request.downloadHandler.text);
+        }
+        else
+        {
+            onError?.Invoke(request.error);
+        }
+    }
 
     //Send the request to LLM
     public static IEnumerator SendMsgToLlm(string userInquiry, System.Action<string> onSuccess, System.Action<string> onError) {
@@ -112,7 +135,7 @@ public static class HttpUtil
 
     public static IEnumerator GetProductInfo(string productID, System.Action<ProductInfoResponseBody> onSuccess, System.Action<string> onError)
     {
-        string url = prodcutInfoURL + "/" + productID;
+        string url = baseURL + "/products/" + productID;
 
         UnityWebRequest request = new UnityWebRequest(url, "GET");
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -134,7 +157,7 @@ public static class HttpUtil
 
     public static IEnumerator SendProfileInfo(ProfileData profileData, string userID, System.Action onSuccess, System.Action<string> onError)
     {
-        string url = profileInfoUrl + "/" + userID; ;
+        string url = baseURL + "/profile/" + userID;
 
         ProfileDataReqBody requestBody = ProfileDataReqBody.Create(profileData);
 
@@ -164,9 +187,8 @@ public static class HttpUtil
     public static IEnumerator GetProfileInfo(System.Action<ProfileData> onSuccess, System.Action<string> onError)
     {
         string userID = SessionManager.UserID;
-        userID = "01";
 
-        string url = profileInfoUrl + "/" + userID;
+        string url = baseURL + "/profile/" + userID;
 
         UnityWebRequest request = new UnityWebRequest(url, "GET");
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -174,7 +196,6 @@ public static class HttpUtil
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-
             ProfileData responseBody = JsonObjectMapper.ProfileData.Get(request.downloadHandler.text);
             onSuccess?.Invoke(responseBody);
         }
@@ -195,7 +216,6 @@ public static class HttpUtil
         LoginRequestBody requestBody = LoginRequestBody.Create(email);
 
         string jsonBody = JsonUtility.ToJson(requestBody);
-        Debug.Log(jsonBody);
 
         UnityWebRequest request = new UnityWebRequest(loginURL, "POST");
         byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
@@ -209,6 +229,11 @@ public static class HttpUtil
         if (request.result == UnityWebRequest.Result.Success)
         {
             UserInfo responseBody = JsonObjectMapper.UserInfo.Get(request.downloadHandler.text);
+
+            //Debug.Log(responseBody.lName);
+            //Debug.Log(responseBody.userID);
+            //Debug.Log(responseBody.fName);
+            //Debug.Log(responseBody.email);
             onSuccess?.Invoke(responseBody);
         }
         else if (request.responseCode == 404)
@@ -226,10 +251,7 @@ public static class HttpUtil
     public static IEnumerator Register(UserInfo userInfo, System.Action onSuccess, System.Action<string> onError)
     {
 
-        UserInfoReqBody requestBody = UserInfoReqBody.Create(userInfo);
-
-        string jsonBody = JsonUtility.ToJson(requestBody);
-        Debug.Log(jsonBody);
+        string jsonBody = UserInfo.ToJson(userInfo);
 
         UnityWebRequest request = new UnityWebRequest(registerURL, "POST");
         byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);

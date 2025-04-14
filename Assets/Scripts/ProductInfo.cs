@@ -14,23 +14,31 @@ public class ProductInfo : MonoBehaviour
     public TMPro.TextMeshProUGUI sensitivities;
     public TMPro.TextMeshProUGUI skinConcerns;
     public TMPro.TextMeshProUGUI price;
+    public TMPro.TextMeshProUGUI expertReview;
+    public TMPro.TextMeshProUGUI claims;
+    public TMPro.TextMeshProUGUI averageRating;
 
     // Reference to the overlay GameObject
     [SerializeField] private GameObject overlay;
 
     public void setProductInfo(string productNameValue, string keyIngredientsValue, string benefitsValue,
                           string sideEffectsValue, string usageValue, string skinTypesValue,
-                                 string sensitivitiesValue, string skinConcernsValue, string priceValue) {
+                                 string allergensValue, string skinConcernsValue, string priceValue, string claimsValue, string expertReviewValue, string average_rating) {
         productName.text = productNameValue;
         keyIngredients.text = keyIngredientsValue;
         benefits.text = benefitsValue;
         sideEffects.text = sideEffectsValue;
         usage.text = usageValue;
         skinTypes.text = skinTypesValue;
-        sensitivities.text = sensitivitiesValue;
+        sensitivities.text = allergensValue;
         skinConcerns.text = skinConcernsValue;
         price.text = priceValue;
+        claims.text = claimsValue;
+        expertReview.text = expertReviewValue;
+        averageRating.text = "Average Rating : " + average_rating;
 
+        Debug.Log(sideEffectsValue);
+        Debug.Log(benefitsValue);
         ShowOverlay(true);
     }
 

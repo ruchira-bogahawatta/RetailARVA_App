@@ -38,6 +38,17 @@ public class ProfileInfo : MonoBehaviour
 
     void SubmitFormData()
     {
+        if (string.IsNullOrWhiteSpace(ageInput.text)) {
+            ToastNotification.Show("Invalid Age Value");
+            return;  
+        }
+
+        if (string.IsNullOrWhiteSpace(minPriceInput.text) || string.IsNullOrWhiteSpace(maxPriceInput.text))
+        {
+            ToastNotification.Show("Invalid Price Range");
+            return;
+        }
+
         string age = ageInput.text;
         string gender = genderDropdown.options[genderDropdown.value].text;
         string skinType = skinTypeDropdown.options[skinTypeDropdown.value].text;
@@ -81,19 +92,18 @@ public class ProfileInfo : MonoBehaviour
 
         ProfileData profileData = new ProfileData();
 
-        profileData.age = age;
+        profileData.age = int.Parse(age);
         profileData.gender = gender;
         profileData.skinType = skinType;
         profileData.sensitiveSkin = sensitiveSkin;
         profileData.skinConcerns = skinConcerns;
         profileData.ingredientsToAvoid = ingredientsToAvoid;
         profileData.knownAllergies = allergies;
-        profileData.minPrice = minPrice;
-        profileData.maxPrice = maxPrice;
+        profileData.minPrice = float.Parse(minPrice); 
+        profileData.maxPrice = float.Parse(maxPrice);
         profileData.preferences = preferences;
 
         string userID = SessionManager.UserID;
-        userID = "01";
         StartCoroutine(HttpUtil.SendProfileInfo(profileData, userID, OnProfileInfoSuccess, OnProfileInfoError));
 
         //Debug.Log("Age: " + age);
@@ -121,11 +131,11 @@ public class ProfileInfo : MonoBehaviour
     {
         if (profileData != null)
         {
-
-            ageInput.text = profileData.age;
+            ageInput.text = profileData.age.ToString();
             genderDropdown.value = genderDropdown.options.FindIndex(option => option.text == profileData.gender);
             skinTypeDropdown.value = skinTypeDropdown.options.FindIndex(option => option.text == profileData.skinType);
-            sensitiveSkinDropdown.value = sensitiveSkinDropdown.options.FindIndex(option => option.text == profileData.sensitiveSkin);
+            string sensitiveSkinText = profileData.sensitiveSkin == "True" ? "Yes" : "No";
+            sensitiveSkinDropdown.value = sensitiveSkinDropdown.options.FindIndex(option => option.text == sensitiveSkinText);
 
             acneToggle.isOn = profileData.skinConcerns.Contains("acne");
             darkSpotsToggle.isOn = profileData.skinConcerns.Contains("darkspots");
@@ -152,8 +162,8 @@ public class ProfileInfo : MonoBehaviour
             soyDerivativesToggle.isOn = profileData.knownAllergies.Contains("soy_derivatives");
             nutOilsToggle.isOn = profileData.knownAllergies.Contains("nut_oils");
 
-            minPriceInput.text = profileData.minPrice;
-            maxPriceInput.text = profileData.maxPrice;
+            minPriceInput.text = profileData.minPrice.ToString();
+            maxPriceInput.text = profileData.maxPrice.ToString();
 
             preferenceNaturalToggle.isOn = profileData.preferences.Contains("natural");
             preferenceOrganicToggle.isOn = profileData.preferences.Contains("organic");

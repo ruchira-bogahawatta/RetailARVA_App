@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using ReadyPlayerMe.Core;
 using UnityEngine;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 [System.Serializable]
 public class JsonObjectMapper
@@ -214,23 +216,28 @@ public class JsonObjectMapper
         [Serializable]
         public class ProductData
         {
-            public string allergens;
+            public List<string> allergens;
             public string application_tips;
-            public string benefits;
+            public List<string> benefits;
             public string brand;
             public string category;
             public string concentrations;
+            public float average_rating;
+
+            [JsonProperty("product_id")]
             public int id;
-            public string ingredients;
+            public List<string> ingredients;
             public bool is_natural;
-            public string key_ingredients;
+            public List<string> key_ingredients;
             public string name;
             public float price;
             public string sensitivities;
-            public string side_effects;
-            public string skin_concerns;
-            public string skin_types;
+            public List<string> side_effects;
+            public List<string> skin_concerns;
+            public List<string> skin_types;
             public string usage;
+            public string expert_review;
+            public List<string> claims;
         }
 
 
@@ -246,15 +253,30 @@ public class JsonObjectMapper
     [Serializable]
     public class ProfileData
     {
-        public string age;
+        public int age;
         public string gender;
+
+        [JsonProperty("skin_type")]
         public string skinType;
+
+        [JsonProperty("sensitive_skin")]
         public string sensitiveSkin;
+
+        [JsonProperty("skin_concerns")]
         public List<string> skinConcerns;
+
+        [JsonProperty("ingredients_to_avoid")]
         public List<string> ingredientsToAvoid;
+
+        [JsonProperty("known_allergies")]
         public List<string> knownAllergies;
-        public string minPrice;
-        public string maxPrice;
+
+        [JsonProperty("min_price")]
+        public float minPrice;
+
+        [JsonProperty("max_price")]
+        public float maxPrice;
+
         public List<string> preferences;
 
         // Constructor to initialize lists (optional, for safety)
@@ -268,9 +290,11 @@ public class JsonObjectMapper
 
         public static ProfileData Get(string responseText)
         {
-            ProfileData response = JsonUtility.FromJson<ProfileData>(responseText);
+            //ProfileData response = JsonUtility.FromJson<ProfileData>(responseText);
 
-            return response;
+            JObject fullJson = JObject.Parse(responseText);
+            JToken dataToken = fullJson["data"];
+            return dataToken.ToObject<ProfileData>();
         }
     }
 
@@ -290,16 +314,32 @@ public class JsonObjectMapper
     [Serializable]
     public class UserInfo
     {
+        [JsonProperty("_id")]
         public string userID;
+
+        [JsonProperty("first_name")]
         public string fName;
+
+        [JsonProperty("last_name")]
         public string lName;
+
+        [JsonProperty("email")]
         public string email;
+
+        //[JsonProperty("created_at")]
+        //public DateTime createdAt;
 
         public static UserInfo Get(string responseText)
         {
-            UserInfo response = JsonUtility.FromJson<UserInfo>(responseText);
+            JObject fullJson = JObject.Parse(responseText);
+            JToken dataToken = fullJson["data"];
+            return dataToken.ToObject<UserInfo>();
+        }
 
-            return response;
+        public static string ToJson(UserInfo data) {
+
+            return JsonConvert.SerializeObject(data);
+
         }
     }
 

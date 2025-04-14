@@ -15,7 +15,7 @@ public class UserData : MonoBehaviour
 
         if (SessionManager.UserID != null) { 
         
-            welcomeMsg.text = "Hi " + SessionManager.FirstName + " " + SessionManager.LastName;
+            welcomeMsg.text = "Hi " + SessionManager.FirstName + " " + SessionManager.UserID ;
         }
         
     }
@@ -32,6 +32,7 @@ public class UserData : MonoBehaviour
         SessionManager.FirstName = null;
         SessionManager.LastName = null;
         SessionManager.Email = null;
+        SessionManager.ChatID = null;
         SessionManager.isLogged = false;
         sceneChange.ChangeScene("Login");
 
