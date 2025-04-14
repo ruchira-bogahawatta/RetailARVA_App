@@ -188,10 +188,17 @@ public class JsonObjectMapper
 
     [Serializable]
     public class LlmRequestBody {
+        public string user_id;
         public string message;
-        public static LlmRequestBody Create(string userInquiry) {
+        public string role;
+        public static LlmRequestBody Create(string userInquiry, string userID) {
             
-            return new LlmRequestBody { message = userInquiry };
+            return new LlmRequestBody { 
+                user_id = userID,    
+                message = userInquiry ,
+                role = "user"
+            
+            };
         }
     }
 
@@ -205,7 +212,7 @@ public class JsonObjectMapper
             LlmResponseBody response = JsonUtility.FromJson<LlmResponseBody>(responseText);
             return response;
         }
-    
+
     }
 
     [Serializable]
@@ -367,6 +374,40 @@ public class JsonObjectMapper
             {
                 email = email
             };
+        }
+    }
+
+
+
+    [Serializable]
+    public class Oid
+    {
+        [JsonProperty("$oid")]
+        public string oid;
+    }
+
+    [Serializable]
+    public class LLMResponseData
+    {
+        [JsonProperty("_id")]
+        public Oid id;
+        public Oid chat_id;
+        public string role;
+        public int message_id;
+        public string content;
+    }
+
+    [Serializable]
+    public class LLMResponseBody
+    {
+        public LLMResponseData data;
+        public string message;
+
+
+
+        public static LLMResponseBody Get(string responseText)
+        {
+            return JsonConvert.DeserializeObject<LLMResponseBody>(responseText);
         }
     }
 

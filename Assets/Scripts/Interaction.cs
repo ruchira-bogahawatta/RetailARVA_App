@@ -1,10 +1,13 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using ReadyPlayerMe.Core;
 using UnityEngine.UI;
 using UnityEngine;
 using System.IO;
+using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+
 
 public class Interaction : MonoBehaviour
 {
@@ -43,11 +46,10 @@ public class Interaction : MonoBehaviour
 
     private void STTOnSuccess(string transcript)
     {
-        //Debug.Log("Transcription: " + transcript);
         transcriptText.text = "Transcript :  " + transcript;
-        // send the text to LLM 
         StartCoroutine(HttpUtil.SendMsgToLlm(transcript, LLMOnSuccess, LLMOnError));
         loadingIcon.SetActive(true);
+
     }
 
     private void STTOnError(string error)
@@ -57,9 +59,9 @@ public class Interaction : MonoBehaviour
 
     private void LLMOnSuccess(string llmResponse)
     {
-        Debug.Log("LLM Response: " + llmResponse);
-        transcriptText.text = "LLM Response :  " + llmResponse;
-        StartCoroutine(HttpUtil.SendTextToCloudTTS(llmResponse, TSSOnSuccess, TSSOnError));
+        string cleanedResponse = Regex.Replace(llmResponse, @"(//|/n2|/n|/|\\{1,2}|\*\*|\*)", "");
+        transcriptText.text = "LLM Response :  " + cleanedResponse;
+        StartCoroutine(HttpUtil.SendTextToCloudTTS(cleanedResponse, TSSOnSuccess, TSSOnError));
     }
 
     private void LLMOnError(string error)
@@ -107,9 +109,9 @@ public class Interaction : MonoBehaviour
         }
     }
 
-    public void CreateChatOnSuccess() {
-        SessionManager.ChatID = "";
-        ToastNotification.Show("Chat Initialized");
+    public void CreateChatOnSuccess(JsonObjectMapper.LLMResponseBody llmres) {
+        SessionManager.ChatID = llmres.data.chat_id.oid;
+        ToastNotification.Show("Conversation Initialized");
     }
 
     public void CreateChatOnError(string error)

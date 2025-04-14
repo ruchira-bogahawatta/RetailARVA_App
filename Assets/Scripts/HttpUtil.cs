@@ -9,12 +9,9 @@ using System;
 public static class HttpUtil
 {
     private static string apiKey = ConfigManager.GetAPIKey("SttAPIKey");
-    private static string baseURL = "http://localhost:5000/api";
+    private static string baseURL = "http://216.81.248.136:5000/api";
     private static string cloudSttURL = "https://speech.googleapis.com/v1/speech:recognize?key=";
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
-    private static string llmURL = baseURL + "/llm";
-    private static string profileInfoUrl = baseURL + "/profile";
-    //private static string prodcutInfoURL = baseURL + "/products";
     private static string loginURL = baseURL + "/users/login";
     private static string registerURL = baseURL + "/users";
 
@@ -80,7 +77,7 @@ public static class HttpUtil
         }
     }
 
-    public static IEnumerator CreateChat(System.Action onSuccess, System.Action<string>onError)
+    public static IEnumerator CreateChat(System.Action<LLMResponseBody> onSuccess, System.Action<string>onError)
     {
 
         string url = baseURL + "/chat/new/" + SessionManager.UserID;
@@ -94,9 +91,8 @@ public static class HttpUtil
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            //LlmResponseBody responseBody = JsonObjectMapper.LlmResponseBody.Get(request.downloadHandler.text);
-            onSuccess?.Invoke();
-            Debug.Log(request.downloadHandler.text);
+            LLMResponseBody responseBody = JsonObjectMapper.LLMResponseBody.Get(request.downloadHandler.text);
+            onSuccess?.Invoke(responseBody);
         }
         else
         {
@@ -107,12 +103,13 @@ public static class HttpUtil
     //Send the request to LLM
     public static IEnumerator SendMsgToLlm(string userInquiry, System.Action<string> onSuccess, System.Action<string> onError) {
 
-        LlmRequestBody requestBody = LlmRequestBody.Create(userInquiry);
+        LlmRequestBody requestBody = LlmRequestBody.Create(userInquiry, SessionManager.UserID);
+
+        string url = baseURL + "/chat/" + SessionManager.ChatID;
 
         string jsonBody = JsonUtility.ToJson(requestBody);
-        Debug.Log(jsonBody);
 
-        UnityWebRequest request = new UnityWebRequest(llmURL, "POST");
+        UnityWebRequest request = new UnityWebRequest(url, "POST");
         byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
         request.uploadHandler = new UploadHandlerRaw(jsonBytes);
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -123,8 +120,8 @@ public static class HttpUtil
 
         if (request.result == UnityWebRequest.Result.Success)
         {
-            LlmResponseBody responseBody = JsonObjectMapper.LlmResponseBody.Get(request.downloadHandler.text);
-            onSuccess?.Invoke(responseBody.response);
+            LLMResponseBody responseBody = JsonObjectMapper.LLMResponseBody.Get(request.downloadHandler.text);
+            onSuccess?.Invoke(responseBody.data.content);
         }
         else
         {
