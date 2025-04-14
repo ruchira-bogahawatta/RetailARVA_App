@@ -22,6 +22,7 @@ public class Interaction : MonoBehaviour
 
     void Start()
     {
+        StartCoroutine(HttpUtil.CreateChat(CreateChatOnSuccess, CreateChatOnError));
         transcriptText.text = "";
         loadingIcon.SetActive(false);
         planeFinder.SetActive(isPlaneFinder);
@@ -104,5 +105,16 @@ public class Interaction : MonoBehaviour
             avatarBtn.GetComponent<Image>().color = defaultBtnColor;
             planeFinder.SetActive(isPlaneFinder);
         }
+    }
+
+    public void CreateChatOnSuccess() {
+        SessionManager.ChatID = "";
+        ToastNotification.Show("Chat Initialized");
+    }
+
+    public void CreateChatOnError(string error)
+    {
+        Debug.Log(error);
+        ToastNotification.Show("Error on chat initialization");
     }
 }

@@ -40,16 +40,23 @@ public class SimpleBarcodeScanner : MonoBehaviour
 
     private void OnProductInfoSuccess(ProductInfoResponseBody productData)
     {
+        Debug.Log(productData.data.benefits);
+        Debug.Log(productData.data.side_effects);
+        Debug.Log(productData.data);
+
         productInfo.setProductInfo(
         productData.data.name,
-        productData.data.key_ingredients,
-        productData.data.benefits,
-        productData.data.side_effects == "NULL" ? "None" : productData.data.side_effects,
+        string.Join(", ", productData.data.key_ingredients),
+        string.Join(", ", productData.data.benefits),
+        string.Join(", ", productData.data.side_effects),
         productData.data.usage,
-        productData.data.skin_types,
-        productData.data.sensitivities == "NULL" ? "None" : productData.data.sensitivities,
-        productData.data.skin_concerns,
-        "Rs. " + productData.data.price.ToString()
+        string.Join(", ", productData.data.skin_types),
+        string.Join(", ", productData.data.allergens),
+        string.Join(", ", productData.data.skin_concerns),
+        "Rs. " + productData.data.price.ToString(),
+        string.Join(", ", productData.data.claims),
+        productData.data.expert_review,
+        productData.data.average_rating.ToString()
     );
 
     }

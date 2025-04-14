@@ -10,5 +10,6 @@ public static class SessionManager
     public static string FirstName { get; set; }
     public static string LastName { get; set; }
     public static string Email { get; set; }
+    public static string ChatID { get; set; }
     public static bool isLogged { get; set; }
 }
