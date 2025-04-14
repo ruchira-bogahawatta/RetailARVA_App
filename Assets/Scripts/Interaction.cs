@@ -16,6 +16,8 @@ public class Interaction : MonoBehaviour
     public Button avatarBtn;
     public GameObject planeFinder;
     public TMPro.TextMeshProUGUI transcriptText;
+    public Animator animator;
+
 
     private bool isPlaneFinder = false;
     private Color activeBtnColor = new Color(1f, 1f, 1f, 0.353f);
@@ -77,12 +79,19 @@ public class Interaction : MonoBehaviour
 
         // Feed to avatar
         VoiceHandler voiceHandler = avatar.GetComponent<VoiceHandler>();
+        animator = avatar.GetComponent<Animator>();
+
 
         loadingIcon.SetActive(false);
         voiceHandler.AudioSource.loop = false;
         voiceHandler.AudioSource.mute = false;
         voiceHandler.AudioSource.volume = 1.0f;
+
+        animator.SetBool("IsTalking", true);
         voiceHandler.PlayAudioClip(audioClip);
+
+        StartCoroutine(StopTalkingWhenDone(audioClip.length, animator));    
+
     }
 
     private void TSSOnError(string error)
@@ -118,5 +127,13 @@ public class Interaction : MonoBehaviour
     {
         Debug.Log(error);
         ToastNotification.Show("Error on chat initialization");
+    }
+
+
+    private IEnumerator StopTalkingWhenDone(float delay, Animator animator)
+    {
+        yield return new WaitForSeconds(delay);
+        if (animator != null)
+            animator.SetBool("IsTalking", false);
     }
 }
