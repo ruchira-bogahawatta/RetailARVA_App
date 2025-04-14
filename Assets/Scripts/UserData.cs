@@ -15,7 +15,7 @@ public class UserData : MonoBehaviour
 
         if (SessionManager.UserID != null) { 
         
-            welcomeMsg.text = "Hi " + SessionManager.FirstName + " " + SessionManager.UserID ;
+            welcomeMsg.text = "Hi " + SessionManager.FirstName + " " + SessionManager.LastName ;
         }
         
     }
