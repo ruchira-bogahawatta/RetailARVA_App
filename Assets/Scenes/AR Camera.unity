@@ -5819,6 +5819,7 @@ MonoBehaviour:
   avatarBtn: {fileID: 159205469}
   planeFinder: {fileID: 374536625}
   transcriptText: {fileID: 44957655}
+  animator: {fileID: 0}
 --- !u!4 &1902345193
 Transform:
   m_ObjectHideFlags: 0

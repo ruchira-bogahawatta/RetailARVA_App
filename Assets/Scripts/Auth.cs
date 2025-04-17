@@ -61,8 +61,9 @@ public class Auth : MonoBehaviour
         loginBtn.interactable = false;
 
         string loginEmail = loginEmailTxt.text;
-        if (!string.IsNullOrWhiteSpace(loginEmail)) { 
-        StartCoroutine(HttpUtil.Login(loginEmail, OnLoginSuccess, OnLoginError));
+        if (!string.IsNullOrWhiteSpace(loginEmail))
+        {
+            StartCoroutine(HttpUtil.Login(loginEmail, OnLoginSuccess, OnLoginError));
         }
 
     }

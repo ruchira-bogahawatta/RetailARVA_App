@@ -9,7 +9,8 @@ using System;
 public static class HttpUtil
 {
     private static string apiKey = ConfigManager.GetAPIKey("SttAPIKey");
-    private static string baseURL = "http://216.81.248.144:5000/api";
+    //private static string baseURL = "http://216.81.248.144:5000/api";
+    private static string baseURL = SessionManager.baseURL;
     private static string cloudSttURL = "https://speech.googleapis.com/v1/speech:recognize?key=";
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
     private static string loginURL = baseURL + "/users/login";
