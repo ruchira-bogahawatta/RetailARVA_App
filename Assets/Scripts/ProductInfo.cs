@@ -37,8 +37,6 @@ public class ProductInfo : MonoBehaviour
         expertReview.text = expertReviewValue;
         averageRating.text = "Average Rating : " + average_rating;
 
-        Debug.Log(sideEffectsValue);
-        Debug.Log(benefitsValue);
         ShowOverlay(true);
     }
 
