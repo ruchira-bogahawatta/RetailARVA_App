@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using System;
@@ -22,6 +22,12 @@ public class MicrophoneBehavior : MonoBehaviour
 
     void ToggleRecording()
     {
+        // Only proceed if avatar is spawned
+        if (!SessionManager.isAvatarSpawned) {
+            ToastNotification.Show("Please spawn the avatar first");
+            return; 
+        }
+
         if (isRecording)
         {
             StopRecording();
@@ -34,7 +40,6 @@ public class MicrophoneBehavior : MonoBehaviour
 
     void StartRecording()
     {
-        Debug.Log(Microphone.devices.Length);
         recordButton.GetComponent<Image>().color = recordingColor;
         audioClip = Microphone.Start(null, false, 15, 44100); // 10 seconds max, 44100 Hz
         isRecording = true;

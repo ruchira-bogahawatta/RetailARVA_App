@@ -74,6 +74,7 @@ public class Interaction : MonoBehaviour
 
     private void TSSOnSuccess(string base64Audio)
     {
+        Debug.Log(base64Audio);
         //Convert to Audio Clip
         AudioClip audioClip = AudioUtil.GetClipFromBase64(base64Audio);
 
@@ -118,8 +119,9 @@ public class Interaction : MonoBehaviour
         }
     }
 
-    public void CreateChatOnSuccess(JsonObjectMapper.LLMResponseBody llmres) {
-        SessionManager.ChatID = llmres.data.chat_id.oid;
+    public void CreateChatOnSuccess(JsonObjectMapper.LLMResponseBody res) {
+        SessionManager.welcomeMsg = res.message ?? "Hi How can I help you?";
+        SessionManager.ChatID = res.data.chat_id.oid;
         ToastNotification.Show("Conversation Initialized");
     }
 
@@ -136,4 +138,15 @@ public class Interaction : MonoBehaviour
         if (animator != null)
             animator.SetBool("IsTalking", false);
     }
+    public void Greet()
+    {
+        StartCoroutine(DelayedGreet());
+    }
+
+    private IEnumerator DelayedGreet()
+    {
+        yield return new WaitForSeconds(2f); // 2-second delay
+        StartCoroutine(HttpUtil.SendTextToCloudTTS(SessionManager.welcomeMsg, TSSOnSuccess, TSSOnError));
+    }
 }
+    

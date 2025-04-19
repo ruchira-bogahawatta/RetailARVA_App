@@ -75,6 +75,9 @@ public class UserData : MonoBehaviour
         SessionManager.ChatID = null;
         SessionManager.isLogged = false;
         SessionManager.baseURL = null;
+        SessionManager.lastScannedProductID = null;
+        SessionManager.isAvatarSpawned = false;
+        SessionManager.welcomeMsg = null;
         sceneChange.ChangeScene("Login");
 
 
