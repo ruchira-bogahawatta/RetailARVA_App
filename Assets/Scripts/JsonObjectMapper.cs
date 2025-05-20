@@ -191,13 +191,15 @@ public class JsonObjectMapper
         public string user_id;
         public string message;
         public string role;
+        public int product_id;
         public static LlmRequestBody Create(string userInquiry, string userID) {
-            
-            return new LlmRequestBody { 
-                user_id = userID,    
-                message = userInquiry ,
-                role = "user"
-            
+
+            return new LlmRequestBody {
+                user_id = userID,
+                message = userInquiry,
+                role = "user",
+                product_id = SessionManager.LastScannedProductID
+
             };
         }
     }
@@ -232,7 +234,8 @@ public class JsonObjectMapper
             public float average_rating;
 
             [JsonProperty("product_id")]
-            public int id;
+            public int product_id;
+
             public List<string> ingredients;
             public bool is_natural;
             public List<string> key_ingredients;

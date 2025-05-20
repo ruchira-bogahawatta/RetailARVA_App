@@ -119,13 +119,13 @@ public class Interaction : MonoBehaviour
         }
     }
 
-    public void CreateChatOnSuccess(JsonObjectMapper.LLMResponseBody res) {
-        SessionManager.welcomeMsg = res.message ?? "Hi How can I help you?";
+    private void CreateChatOnSuccess(JsonObjectMapper.LLMResponseBody res) {
+        SessionManager.welcomeMsg = res.data.content ?? "Hi How can I help you?";
         SessionManager.ChatID = res.data.chat_id.oid;
         ToastNotification.Show("Conversation Initialized");
     }
 
-    public void CreateChatOnError(string error)
+    private void CreateChatOnError(string error)
     {
         Debug.Log(error);
         ToastNotification.Show("Error on chat initialization");
@@ -140,13 +140,9 @@ public class Interaction : MonoBehaviour
     }
     public void Greet()
     {
-        StartCoroutine(DelayedGreet());
+        StartCoroutine(HttpUtil.SendTextToCloudTTS(SessionManager.welcomeMsg, TSSOnSuccess, TSSOnError));
+
     }
 
-    private IEnumerator DelayedGreet()
-    {
-        yield return new WaitForSeconds(2f); // 2-second delay
-        StartCoroutine(HttpUtil.SendTextToCloudTTS(SessionManager.welcomeMsg, TSSOnSuccess, TSSOnError));
-    }
 }
     

@@ -41,7 +41,7 @@ public class SimpleBarcodeScanner : MonoBehaviour
     private void OnProductInfoSuccess(ProductInfoResponseBody productData)
     {
         
-        SessionManager.lastScannedProductID = productData.data.id.ToString();
+        SessionManager.LastScannedProductID = productData.data.product_id;
         productInfo.setProductInfo(
         productData.data.name,
         string.Join(", ", productData.data.key_ingredients),
