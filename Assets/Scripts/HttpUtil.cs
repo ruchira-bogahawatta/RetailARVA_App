@@ -9,7 +9,6 @@ using System;
 public static class HttpUtil
 {
     private static string apiKey = ConfigManager.GetAPIKey("SttAPIKey");
-    //private static string baseURL = "http://216.81.248.144:5000/api";
     private static string baseURL = SessionManager.baseURL;
     private static string cloudSttURL = "https://speech.googleapis.com/v1/speech:recognize?key=";
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";
@@ -227,11 +226,6 @@ public static class HttpUtil
         if (request.result == UnityWebRequest.Result.Success)
         {
             UserInfo responseBody = JsonObjectMapper.UserInfo.Get(request.downloadHandler.text);
-
-            //Debug.Log(responseBody.lName);
-            //Debug.Log(responseBody.userID);
-            //Debug.Log(responseBody.fName);
-            //Debug.Log(responseBody.email);
             onSuccess?.Invoke(responseBody);
         }
         else if (request.responseCode == 404)
@@ -270,6 +264,4 @@ public static class HttpUtil
             onError?.Invoke(request.error);
         }
     }
-
-
 }

@@ -56,7 +56,7 @@ public class UserData : MonoBehaviour
 
     void BaseURLCheck() {
 
-        if (!string.IsNullOrEmpty(SessionManager.baseURL))
+        if (!string.IsNullOrEmpty(SessionManager.baseURL) || SessionManager.baseURL == "Base URL is not updated")
         {
             baseUrlMsg.text = "Base URL is : " + SessionManager.baseURL;
         }
@@ -75,7 +75,7 @@ public class UserData : MonoBehaviour
         SessionManager.ChatID = null;
         SessionManager.isLogged = false;
         SessionManager.baseURL = null;
-        SessionManager.lastScannedProductID = null;
+        SessionManager.LastScannedProductID = 0;
         SessionManager.isAvatarSpawned = false;
         SessionManager.welcomeMsg = null;
         sceneChange.ChangeScene("Login");
@@ -107,7 +107,8 @@ public class UserData : MonoBehaviour
             this.CloseSettingOverlay();
             BaseURLCheck();
         }
-        else { 
+        else
+        {
             ToastNotification.Show("Invalid URL");
         }
     }

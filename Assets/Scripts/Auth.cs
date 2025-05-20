@@ -58,12 +58,23 @@ public class Auth : MonoBehaviour
 
     public void Login()
     {
-        loginBtn.interactable = false;
-
-        string loginEmail = loginEmailTxt.text;
-        if (!string.IsNullOrWhiteSpace(loginEmail))
+        if (!string.IsNullOrEmpty(SessionManager.baseURL) || SessionManager.baseURL == "Base URL is not updated")
         {
-            StartCoroutine(HttpUtil.Login(loginEmail, OnLoginSuccess, OnLoginError));
+            loginBtn.interactable = false;
+
+            string loginEmail = loginEmailTxt.text;
+            if (!string.IsNullOrWhiteSpace(loginEmail))
+            {
+                StartCoroutine(HttpUtil.Login(loginEmail, OnLoginSuccess, OnLoginError));
+            }
+            else { 
+              ToastNotification.Show("Enter a proper email");
+
+            }
+        }
+        else
+        {
+            ToastNotification.Show("Please set the Base URL first");
         }
 
     }
