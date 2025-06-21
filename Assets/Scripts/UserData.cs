@@ -22,11 +22,11 @@ public class UserData : MonoBehaviour
     void Start()
     {
         this.ShowSettingOverlay(false);
-        logoutBtn.onClick.AddListener(Logout);
-        startBtn.onClick.AddListener(ChangeToArCamera);
-        saveURLBtn.onClick.AddListener(SaveBaseURL);
-        settingBtn.onClick.AddListener(() => ShowSettingOverlay(true));
-        overlayCloseBtn.onClick.AddListener(CloseSettingOverlay);
+        logoutBtn?.onClick.AddListener(Logout);
+        startBtn?.onClick.AddListener(ChangeToArCamera);
+        saveURLBtn?.onClick.AddListener(SaveBaseURL);
+        settingBtn?.onClick.AddListener(() => ShowSettingOverlay(true));
+        overlayCloseBtn?.onClick.AddListener(CloseSettingOverlay);
         UserCheck();
         BaseURLCheck();
 
@@ -41,16 +41,11 @@ public class UserData : MonoBehaviour
 
     void UserCheck() {
 
-        if (SessionManager.UserID != null)
-        {
-
-            welcomeMsg.text = "Hi " + SessionManager.FirstName + " " + SessionManager.LastName;
-        }
-        else
-        {
-            welcomeMsg.text = "Hi There";
-
-        }
+        welcomeMsg?.SetText(
+            SessionManager.UserID != null
+                ? $"Hi {SessionManager.FirstName} {SessionManager.LastName}"
+                : "Hi There"
+        );
 
     }
 
