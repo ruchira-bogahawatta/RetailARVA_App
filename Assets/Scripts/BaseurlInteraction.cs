@@ -21,9 +21,9 @@ public class BaseurlInteraction : MonoBehaviour
     void Start()
     {
         this.ShowSettingOverlay(false);
-        saveURLBtn.onClick.AddListener(SaveBaseURL);
-        settingBtn.onClick.AddListener(() => ShowSettingOverlay(true));
-        overlayCloseBtn.onClick.AddListener(CloseSettingOverlay);
+        saveURLBtn?.onClick.AddListener(SaveBaseURL);
+        settingBtn?.onClick.AddListener(() => ShowSettingOverlay(true));
+        overlayCloseBtn?.onClick.AddListener(CloseSettingOverlay);
 
     }
 
