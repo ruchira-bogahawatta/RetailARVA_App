@@ -16,3 +16,7 @@ RetailARVA is an augmented reality (AR) virtual assistant designed specifically 
 
 - **Target API Level**: Android 14 (API Level 34)  
 - **Minimum API Level**: Android 11 (API Level 30)
+
+## Setup Instructions
+
+After cloning the project, download the Vuforia package file from [here](https://getshared.com/lcHXIy7w) and copy it into the `Packages` folder of the project directory **before** opening the project in Unity.
