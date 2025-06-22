@@ -3,12 +3,11 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.Text;
 using static JsonObjectMapper;
-using Unity.VisualScripting;
 using System;
 
 public static class HttpUtil
 {
-    private static string apiKey = ConfigManager.GetAPIKey("SttAPIKey");
+    private static string apiKey = SessionManager.apiKey;
     private static string baseURL = SessionManager.baseURL;
     private static string cloudSttURL = "https://speech.googleapis.com/v1/speech:recognize?key=";
     private static string cloudTssURL = "https://texttospeech.googleapis.com/v1beta1/text:synthesize?key=";

@@ -52,16 +52,13 @@ public class Auth : MonoBehaviour
         userInfo.fName = fName;
         userInfo.lName = lName;
         StartCoroutine(HttpUtil.Register(userInfo, OnRegisterSuccess, OnRegisterError));
-
-
     }
 
     public void Login()
     {
         loginBtn.interactable = false;
-        if (!string.IsNullOrEmpty(SessionManager.baseURL) || SessionManager.baseURL == "Base URL is not updated")
+        if (!string.IsNullOrEmpty(SessionManager.baseURL) && !string.IsNullOrEmpty(SessionManager.apiKey))
         {
-
             string loginEmail = loginEmailTxt.text;
             if (!string.IsNullOrWhiteSpace(loginEmail))
             {
@@ -71,13 +68,11 @@ public class Auth : MonoBehaviour
             {
                 ToastNotification.Show("Enter a proper email");
                 loginBtn.interactable = true;
-
-
             }
         }
         else
         {
-            ToastNotification.Show("Please set the Base URL first");
+            ToastNotification.Show("Please set the Base URL & API Key first");
             loginBtn.interactable = true;
         }
 
@@ -123,7 +118,4 @@ public class Auth : MonoBehaviour
         loginBtn.interactable = true;
         Debug.Log("Error occurred: " + error);
     }
-
-
-
 }

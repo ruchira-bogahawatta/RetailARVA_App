@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -9,6 +10,7 @@ public class UserData : MonoBehaviour
     public TMPro.TextMeshProUGUI welcomeMsg;
     public TMPro.TextMeshProUGUI baseUrlMsg;
     public TMP_InputField baseUrlTxt;
+    public TMP_InputField apiKeyTxt;
 
     public Button logoutBtn;
     public Button settingBtn;
@@ -35,11 +37,12 @@ public class UserData : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
 
-    void UserCheck() {
+    void UserCheck()
+    {
 
         welcomeMsg?.SetText(
             SessionManager.UserID != null
@@ -49,19 +52,22 @@ public class UserData : MonoBehaviour
 
     }
 
-    void BaseURLCheck() {
+    void BaseURLCheck()
+    {
 
         if (!string.IsNullOrEmpty(SessionManager.baseURL) || SessionManager.baseURL == "Base URL is not updated")
         {
-            baseUrlMsg.text = "Base URL is : " + SessionManager.baseURL;
+            baseUrlMsg.text = "Base URL is : " + SessionManager.baseURL + "\nAPI Key : " + SessionManager.apiKey;
         }
-        else {
+        else
+        {
             baseUrlMsg.text = "Base URL is not updated";
         }
-    
+
     }
 
-    void Logout() {
+    void Logout()
+    {
         SceneChange sceneChange = FindObjectOfType<SceneChange>();
         SessionManager.UserID = null;
         SessionManager.FirstName = null;
@@ -73,6 +79,7 @@ public class UserData : MonoBehaviour
         SessionManager.LastScannedProductID = 0;
         SessionManager.isAvatarSpawned = false;
         SessionManager.welcomeMsg = null;
+        SessionManager.apiKey = null;
         sceneChange.ChangeScene("Login");
 
 
@@ -94,28 +101,32 @@ public class UserData : MonoBehaviour
     void SaveBaseURL()
     {
         string baseURL = baseUrlTxt.text.Trim();
-
-        if (!string.IsNullOrEmpty(baseURL))
+        string apiKey = apiKeyTxt.text.Trim();
+        Console.Write("API KEY :", apiKey);
+        if (!string.IsNullOrEmpty(baseURL) || !string.IsNullOrEmpty(apiKey))
         {
             SessionManager.baseURL = "http://" + baseURL + ":5000/api";
+            SessionManager.apiKey = apiKey;
             baseUrlTxt.text = "";
             this.CloseSettingOverlay();
             BaseURLCheck();
         }
         else
         {
-            ToastNotification.Show("Invalid URL");
+            ToastNotification.Show("Invalid URL / API Key");
         }
     }
 
-    void ChangeToArCamera() {
-        if (!string.IsNullOrEmpty(SessionManager.baseURL))
+    void ChangeToArCamera()
+    {
+        if (!string.IsNullOrEmpty(SessionManager.baseURL) && !string.IsNullOrEmpty(SessionManager.apiKey))
         {
             SceneChange sceneChange = FindObjectOfType<SceneChange>();
             sceneChange.ChangeScene("AR Camera");
         }
-        else {
-            ToastNotification.Show("Please set the Base URL first");
+        else
+        {
+            ToastNotification.Show("Please set the Base URL & API Key first");
         }
 
     }
